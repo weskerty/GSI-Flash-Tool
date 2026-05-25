@@ -80,8 +80,17 @@ This batch script simplifies the process of flashing a Generic System Image (GSI
     <li><code>vbmeta.img</code></li>
     <li><code>vbmeta_system.img</code></li>
     <li><code>vbmeta_vendor.img</code></li>
-    <li><code>vbmeta_boot.img</code></li>
+    <li><code>vendor_boot.img</code> or <code>boot.img</code></li>
   </ul>
+<p>These files are only needed if it's your first time and you haven't disabled vbmeta yet. <br>
+
+are optional if you want to install KSU. The only thing really required is your GSI.img.</p>
+
+<br>
+<a href="https://www.needrom.com/">
+    🔗 Find your Firmware ↗️
+  </a>
+  
 </details>
 
 <h2>Tested On: </h2>
