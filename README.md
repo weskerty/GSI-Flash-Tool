@@ -40,7 +40,7 @@ This batch script simplifies the process of flashing a Generic System Image (GSI
    <h3>Arch Based</h3>
 
     
-    sudo pacman -Syu android-tools android-udev --needed --noconfirm
+    sudo pacman -Syu git android-tools android-udev --needed --noconfirm
     
 
   
@@ -49,7 +49,7 @@ This batch script simplifies the process of flashing a Generic System Image (GSI
    <h3>Debian Based</h3>
 
     
-    sudo apt-get install android-sdk-platform-tools -y
+    sudo apt-get install git android-sdk-platform-tools -y
     
 
   
@@ -59,6 +59,7 @@ This batch script simplifies the process of flashing a Generic System Image (GSI
 
     
     winget install Google.PlatformTools --source winget
+    winget install Git.Git --source winget
     
 
   
