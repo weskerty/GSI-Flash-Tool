@@ -1,9 +1,8 @@
 #!/bin/bash
 
-cd "$(dirname "$0")" 2>/dev/null || cd /tmp || exit 1
+cd "$(dirname "$0")" 2>/dev/null || exit 1
 
 G="\e[32m"; R="\e[31m"; Y="\e[33m"; N="\e[0m"
-
 ok(){ echo -e "${G}[OK]${N} $1"; }
 er(){ echo -e "${R}[ERROR]${N} $1"; }
 inf(){ echo -e "${Y}[INFO]${N} $1"; }
@@ -11,28 +10,23 @@ inf(){ echo -e "${Y}[INFO]${N} $1"; }
 chk(){ command -v "$1" >/dev/null 2>&1; }
 
 dep(){
-  M=0
-  chk git && ok "git" || { er "git"; M=1; }
-  chk fastboot && ok "fastboot" || { er "fastboot"; M=1; }
-
-  [ "$M" -eq 0 ] && return 0
-
-  inf "install deps"
-
-  if chk pacman; then
-    sudo pacman -Syu git android-tools android-udev --noconfirm --needed
-  elif chk apt-get; then
-    sudo apt-get update
-    sudo apt-get install -y git android-sdk-platform-tools
-  else
-    er "no pkg mgr"
-    exit 1
-  fi
+  chk git && ok "git" || { er "git"; exit 1; }
+  chk fastboot && ok "fastboot" || { er "fastboot"; exit 1; }
 }
 
-boot(){
+clone(){
   D="${1:-$HOME/GSI-Flash-Tool}"
-  inf "clone -> $D"
+
+  [ -e "$D" ] && {
+    inf "exists"
+    cd "$D" 2>/dev/null || { er "bad dir"; exit 1; }
+    [ -f RUN-Linux.sh ] && exec bash RUN-Linux.sh
+    er "no RUN"
+    exit 1
+  }
+
+  dep
+  inf "clone $D"
   git clone https://github.com/weskerty/GSI-Flash-Tool.git --depth 1 --single-branch "$D" || exit 1
   cd "$D" || exit 1
   exec bash RUN-Linux.sh
@@ -40,9 +34,6 @@ boot(){
 
 run(){
   dep
-
-  chk git && ok "git" || exit 1
-  chk fastboot && ok "fastboot" || exit 1
 
   git rev-parse --is-inside-work-tree >/dev/null 2>&1 && {
     git fetch origin
@@ -52,7 +43,6 @@ run(){
   }
 
   chmod -R +x bin scripts 2>/dev/null
-
 
 echo "              Power Button"
 echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⬇️"
@@ -72,8 +62,8 @@ echo "⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣦⣤⣤⣤⣤⣴⣿⣿⣿⡿⠃"
   bash scripts/installer.sh
 }
 
-if [ ! -d .git ]; then
-  boot "$@"
-else
-  run
-fi
+[ -d .git ] && run || clone "$@"
+
+
+
+
