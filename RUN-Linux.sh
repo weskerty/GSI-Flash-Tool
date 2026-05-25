@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd "$(dirname "$0")" 2>/dev/null || exit 1
-
 G="\e[32m"; R="\e[31m"; Y="\e[33m"; N="\e[0m"
 ok(){ echo -e "${G}[OK]${N} $1"; }
 er(){ echo -e "${R}[ERROR]${N} $1"; }
@@ -99,7 +97,8 @@ boot(){
     [ -d "$D/.git" ] && {
         inf "repo exists"
         cd "$D" || exit 1
-        exec bash RUN-Linux.sh
+        run_local
+        return
     }
 
     [ -e "$D" ] && [ ! -d "$D" ] && { er "path invalid"; exit 1; }
@@ -111,12 +110,16 @@ boot(){
 
     cd "$D" || exit 1
 
-    [ -f RUN-Linux.sh ] || { er "missing entry"; exit 1; }
+    [ -f scripts/installer.sh ] || { er "missing entry"; exit 1; }
 
-    exec bash RUN-Linux.sh
+    run_local
 }
 
 detect_env
 install_deps
 
-[ -d .git ] && run_local || boot "$@"
+if [ -d .git ]; then
+    run_local
+else
+    boot "$@"
+fi
