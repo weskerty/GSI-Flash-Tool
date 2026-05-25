@@ -41,7 +41,7 @@ else
 fi
 
 if [ "$M" -eq 1 ]; then
-    inf "Instalando dependencias..."
+    inf "Install..."
 
     if chk pacman; then
         inf "Arch Based"
@@ -54,7 +54,7 @@ if [ "$M" -eq 1 ]; then
 
     else
         er "Sistem off"
-        exit 1
+        #exit 1
     fi
 fi
 
@@ -82,5 +82,19 @@ R1=$(git rev-parse origin/main)
 
 chmod -R +x bin
 chmod -R +x scripts
+
+echo "              Power Button"
+echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⬇️"
+echo "⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣿⠿⠿⠿⠿⠿⢿⣿⠿⢿⣿⣷⡄"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀FASTBOOT ⠀⣿⣿ ⬅️ Vol Down"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣦⣤⣤⣤⣤⣴⣿⣿⣿⡿⠃"
+
 
 bash scripts/installer.sh
