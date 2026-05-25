@@ -23,26 +23,50 @@ detect_env(){
     esac
 }
 
+need(){
+    for x in "$@"; do
+        chk "$x" || return 0
+    done
+    return 1
+}
+
 install_deps(){
     if [ "$IS_TERMUX" -eq 1 ]; then
+        need curl git fastboot 7z || {
+            ok "deps already installed"
+            return
+        }
+
         inf "Installing deps (Termux)..."
         termux-wake-lock 2>/dev/null || true
         apt-get update
         pkg install -y tur-repo x11-repo
         apt-get update
-        apt update -y && yes | apt upgrade && pkg install -y curl termux-adb git 7zip || pkg install -y p7zip
+        apt update -y && yes | apt upgrade
+        pkg install -y curl git termux-adb 7zip || pkg install -y p7zip
         return
     fi
+
     case "$DISTRO" in
         arch)
+            need curl git fastboot 7z || {
+                ok "deps already installed"
+                return
+            }
+
             inf "Installing deps (Arch)..."
             pacman -Syy
             pacman -S --noconfirm --needed curl git p7zip android-tools android-udev || true
             ;;
         debian)
-            inf "Installing deps (Debian)..."
+            need curl git fastboot 7z || {
+                ok "deps already installed"
+                return
+            }
+
+            inf "Installing deps..."
             apt-get update
-            apt-get install -y curl git p7zip-full android-tools-fastboot || true
+            apt-get install -y curl git p7zip-full android-tools-fastboot android-sdk-libsparse-utils || true
             ;;
         *)
             inf "Unknown distro - skipping dep install"
