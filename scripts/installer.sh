@@ -66,8 +66,23 @@ to_bootloader() {
 }
 
 detect_state() {
-    log_info "Detecting device state..."
-    log_warn "Reboot to fastboot: Vol- + Power until it appears"
+
+    log_warn "Press and hold [Power] and [Vol-] at the same time until FASTBOOT appears."
+
+echo "              Power Button"
+echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⬇️"
+echo "⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣿⠿⠿⠿⠿⠿⢿⣿⠿⢿⣿⣷⡄"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀FASTBOOT ⠀⣿⣿ ⬅️ Vol Down"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣿⡇"
+echo "⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣦⣤⣤⣤⣤⣴⣿⣿⣿⡿⠃"
+
+
     log_info "Waiting for device..."
     _GVA=$($_FB_BIN getvar all 2>&1 | sed 's/(bootloader) //g')
     local s; s=$(gva is-userspace)
