@@ -65,7 +65,8 @@ to_bootloader() {
     IN_FBD=0; log_ok "Bootloader ready"
 }
 
-detect_state() 
+detect_state() {
+    log_info "Detecting device state..."
     log_warn "Reboot to fastboot: Vol- + Power until it appears"
     log_info "Waiting for device..."
     _GVA=$($_FB_BIN getvar all 2>&1 | sed 's/(bootloader) //g')
@@ -108,7 +109,7 @@ show_summary() {
     fi
     [ -n "$batt" ] && {
         echo -e "  ${C_C}Battery:${NC} $batt%" >&2
-        [ "$batt" -lt 30 ] && log_warn "Battery below 30% aslot forcing size, "
+        [ "$batt" -lt 30 ] && log_warn "Battery below 30% - risk of power loss during flash"
     }
     echo "" >&2
     echo -e "${C_W}--- Bootloader ---${NC}" >&2
@@ -161,10 +162,10 @@ detect_slot() {
         log_ok "Slot: $SLOT"
     elif [ "$_SA" -gt 0 ]; then
         IS_VAB=1; SLOT="a"
-        log_warn "VAB detected - only system_a "
+        log_warn "VAB detected - only system_a has size, forcing slot a"
     elif [ "$_SB" -gt 0 ]; then
         IS_VAB=1; SLOT="b"
-        log_warn "VAB detected - only system_b"
+        log_warn "VAB detected - only system_b has size, forcing slot b"
     else
         log_err "No system partition found (system_a=0, system_b=0)"; exit 1
     fi
@@ -329,7 +330,7 @@ do_resize() {
 
     local new_avail
     new_avail=$(try_free_space "$needed" "$avail") || {
-        log_err "Insufficient space after all options. Aborting. NEED RESTORE SUPER.IMG"
+        log_err "Insufficient space after all options. Aborting."
         exit 1
     }
 
@@ -404,7 +405,7 @@ show_plan() {
     fi
 
     echo "" >&2
-    echo -e "${C_R}Wipe userdata + metadata? (y/N) [DELETE STORAGE]:${NC}" >&2
+    echo -e "${C_R}Wipe userdata + metadata? (y/N) [IRREVERSIBLE]:${NC}" >&2
     read -r -p "> " w
     [[ "$w" =~ ^[Yy]$ ]] && WIPE=1
 
