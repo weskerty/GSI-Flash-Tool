@@ -10,29 +10,11 @@ inf(){ echo -e "${Y}[INFO]${N} $1"; }
 chk(){ command -v "$1" >/dev/null 2>&1; }
 
 dep(){
-  chk git && ok "git" || { er "git"; exit 1; }
-  chk fastboot && ok "fastboot" || { er "fastboot"; exit 1; }
+  chk git || exit 1
+  chk fastboot || exit 1
 }
 
-clone(){
-  D="${1:-$HOME/GSI-Flash-Tool}"
-
-  [ -e "$D" ] && {
-    inf "exists"
-    cd "$D" 2>/dev/null || { er "bad dir"; exit 1; }
-    [ -f RUN-Linux.sh ] && exec bash RUN-Linux.sh
-    er "no RUN"
-    exit 1
-  }
-
-  dep
-  inf "clone $D"
-  git clone https://github.com/weskerty/GSI-Flash-Tool.git --depth 1 --single-branch "$D" || exit 1
-  cd "$D" || exit 1
-  exec bash RUN-Linux.sh
-}
-
-run(){
+run_local(){
   dep
 
   git rev-parse --is-inside-work-tree >/dev/null 2>&1 && {
@@ -43,6 +25,29 @@ run(){
   }
 
   chmod -R +x bin scripts 2>/dev/null
+  bash scripts/installer.sh
+}
+
+boot(){
+  D="${1:-$HOME/GSI-Flash-Tool}"
+
+  [ -d "$D/.git" ] && {
+    inf "repo exists"
+    cd "$D" || exit 1
+    exec bash RUN-Linux.sh
+  }
+
+  [ -e "$D" ] && [ ! -d "$D" ] && { er "path invalid"; exit 1; }
+
+  dep
+
+  inf "cloning"
+  git clone https://github.com/weskerty/GSI-Flash-Tool.git --depth 1 --single-branch "$D" || exit 1
+
+  cd "$D" || exit 1
+
+  [ -f RUN-Linux.sh ] || { er "missing entry"; exit 1; }
+
 
 echo "              Power Button"
 echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⬇️"
@@ -58,11 +63,11 @@ echo "⠀⠀⠀⠀⠀⠀⠀⢸⣿⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣿⡇"
 echo "⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣦⣤⣤⣤⣤⣴⣿⣿⣿⡿⠃"
 
 
-
-  bash scripts/installer.sh
+  exec bash RUN-Linux.sh
 }
 
-[ -d .git ] && run || clone "$@"
+[ -d .git ] && run_local || boot "$@"
+
 
 
 
