@@ -92,17 +92,24 @@ are optional if you want to install KSU. The only thing really required is your 
   </a>
   
 </details>
+<br>
 
+<h1>Run in Linux: </h1>
+    
+    curl -s https://raw.githubusercontent.com/weskerty/GSI-Flash-Tool/refs/heads/main/RUN-Linux.sh | bash 
+    
+
+<br>
 <h2>Tested On: </h2>
 
 <table>
   <tr>
-    <td><img width="400" src="https://oasis.opstatics.com/content/dam/oasis/page/2021/ebba/spec/Blue-Void.png"></td>
-    <td><img width="400" src="https://resource.megaeletronicos.com/uploads/Product/new/1/4/8/8/4/1/148841/1757770480_1757770480.webp"></td>
+    <td><img width="100" src="https://github.com/user-attachments/assets/b7c329e2-6664-4416-a77f-a21cafd96946"></td>
+    <td><img width="100" src=""></td>
   </tr>
   <tr>
-    <td>opo</td>
-    <td>taiko</td>
+    <td>Xiaomi Taiko</td>
+    <td></td>
   </tr>
     <tr>
       <td><img width="400" src="" /></td>
