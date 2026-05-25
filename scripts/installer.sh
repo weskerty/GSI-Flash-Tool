@@ -239,9 +239,22 @@ extract_gsi() {
 
 ask_gsi() {
     echo "" >&2
-    echo -e "${C_W}GSI image path:${NC}" >&2
+    echo -e "${C_W}GSI image path or URL:${NC}" >&2
     read -r -p "> " input
     input=${input//\'/}; input=${input//\"/}
+
+    if [[ "$input" == http://* ]] || [[ "$input" == https://* ]]; then
+        local dl_dir="$HOME/Downloads"
+        mkdir -p "$dl_dir"
+        local fname; fname="$(basename "$input")"
+        fname="${fname%%\?*}"
+        [ -z "$fname" ] && fname="gsi_download"
+        local dl_path="$dl_dir/$fname"
+        log_info "Downloading to $dl_path..."
+        curl -L --progress-bar -o "$dl_path" "$input" || { log_err "Download failed"; exit 1; }
+        input="$dl_path"
+    fi
+
     [ -f "$input" ] || { log_err "Not found: $input"; exit 1; }
     if [[ "$input" != *.img ]]; then
         input=$(extract_gsi "$input")
@@ -547,6 +560,31 @@ _ask_ksu() {
     [[ "$_ksu_ans" =~ ^[Yy]$ ]] && source "$BD/scripts/ksu.sh"
 }
 
+termux_ask_mode() {
+    local sa sb
+    sa=$(su -c "blockdev --getsize64 /dev/block/by-name/system_a" 2>/dev/null || echo 0)
+    sb=$(su -c "blockdev --getsize64 /dev/block/by-name/system_b" 2>/dev/null || echo 0)
+    sa=$(( sa + 0 )); sb=$(( sb + 0 ))
+
+    local has_own=0
+    [ "$HAS_ROOT" -eq 1 ] && [ "$sa" -gt 0 ] && [ "$sb" -gt 0 ] && has_own=1
+
+    echo "" >&2
+    echo -e "${C_W}Termux mode:${NC}" >&2
+    if [ "$has_own" -eq 1 ]; then
+        echo -e "  1) This device (OTA via root)" >&2
+        echo -e "  2) Other device (fastbootD via USB)" >&2
+        read -r -p "> " sel
+        [[ "$sel" == "2" ]] && return 1
+        return 0
+    else
+        echo -e "  Root/partitions not available for this device." >&2
+        echo -e "  1) Other device (fastbootD via USB)" >&2
+        read -r -p "> " _
+        return 1
+    fi
+}
+
 main() {
     echo "" >&2
     echo -e "${C_W}=== GSI Flash Tool ===${NC}" >&2
@@ -555,17 +593,10 @@ main() {
     chk_deps
 
     if [ "$IS_TERMUX" -eq 1 ]; then
-        if [ "$HAS_ROOT" -eq 1 ]; then
+        termux_ask_mode
+        local termux_own=$?
+        if [ "$termux_own" -eq 0 ]; then
             log_ok "Mode: Termux OTA"
-            local sa sb
-            sa=$(su -c "blockdev --getsize64 /dev/block/by-name/system_a" 2>/dev/null || echo 0)
-            sb=$(su -c "blockdev --getsize64 /dev/block/by-name/system_b" 2>/dev/null || echo 0)
-            sa=$(( sa + 0 )); sb=$(( sb + 0 ))
-            if [ "$sa" -eq 0 ] || [ "$sb" -eq 0 ]; then
-                log_err "VAB device - Termux OTA requires both slots with real size"
-                log_err "Use fastbootD mode from PC instead"
-                exit 1
-            fi
             local cur_slot; cur_slot=$(su -c "getprop ro.boot.slot_suffix" 2>/dev/null | tr -d '_')
             [ -z "$cur_slot" ] && cur_slot=$(su -c "bootctl get-current-slot" 2>/dev/null)
             [ "$cur_slot" = "0" ] && cur_slot="a"
@@ -575,23 +606,26 @@ main() {
             else log_err "Could not detect active slot"; exit 1
             fi
             log_info "Active slot: $cur_slot -> flashing to: $SLOT"
+            ask_gsi
+            do_termux_update
         else
-            log_err "Termux detected but no root - connect to PC and run in fastbootD mode"
-            exit 1
+            log_ok "Mode: fastbootD (Termux)"
+            chk_deps
+            detect_state
+            show_summary
+            detect_slot
+            ask_gsi
+            _ask_ksu
+            show_plan
+            do_flash
         fi
     else
         log_info "Mode: fastbootD"
         detect_state
         show_summary
         detect_slot
-    fi
-
-    ask_gsi
-    _ask_ksu
-
-    if [ "$IS_TERMUX" -eq 1 ]; then
-        do_termux_update
-    else
+        ask_gsi
+        _ask_ksu
         show_plan
         do_flash
     fi
