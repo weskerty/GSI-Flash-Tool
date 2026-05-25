@@ -1,0 +1,139 @@
+<div style="text-align:center;"
+<p align="center">
+<img src="https://github.com/user-attachments/assets/1a23e163-4c00-49e5-bccb-24d52ec8d65c" alt="Termuxito" width="100">
+<h1 align="center">Installer GSI</h1>
+</div>
+
+This batch script simplifies the process of flashing a Generic System Image (GSI) on your Android device.
+
+
+
+<h2>📋 Requirements</h2>
+
+<details>
+  <summary>📱 Android device with unlocked bootloader</summary>
+  <p>Trying to run it will fail if it's not unlocked. Each device has its own unlocking method. </p>
+
+
+
+<a href="https://github.com/zenfyrdev/bootloader-unlock-wall-of-shame#-avoid-at-all-costs">
+    🔗 Find yours here ↗️
+  </a>
+  
+</details>
+
+<details>
+  <summary>📦 GSI ROM</summary>
+  Download the GSI you prefer. <br><br>
+
+  <a href="https://github.com/TrebleDroid/treble_experimentations/wiki/Generic-System-Image-%28GSI%29-list">
+    🔗 View GSI List
+  </a>
+  <br> 
+  Normally, if your phone is stuck on a certain version, you'll need to use a GSI with that version. Higher versions might work, but they require patches to function. For example, if Android 13+ WiFi is not detected, this can be fixed with ADB.
+  
+</details>
+
+<details>
+  <summary>🛠️ Install ADB and Fastboot tools on PC</summary>
+   <br>
+   <h3>Arch Based</h3>
+
+    
+    sudo pacman -Syu android-tools android-udev --needed --noconfirm
+    
+
+  
+  <br>
+    
+   <h3>Debian Based</h3>
+
+    
+    sudo apt-get install android-sdk-platform-tools -y
+    
+
+  
+  <br>
+    
+<h3>Windows</h3>
+
+    
+    winget install Google.PlatformTools --source winget
+    
+
+  
+  <!--
+  --scope machine -->
+  
+  <br>
+  <p> Windows requires Google's ADB drivers, as well as drivers from the processor and device manufacturers. <br>
+     1- Google ADB Drivers 2- MTK/QL/etc Drivers 3- Xiaomi/etc Drivers </p>
+
+   
+</details>
+
+<details>
+  <summary>📂 Required firmware files</summary>
+  Place the required firmware files in the same directory as the script:
+  <ul>
+    <li><code>vbmeta.img</code></li>
+    <li><code>vbmeta_system.img</code></li>
+    <li><code>vbmeta_vendor.img</code></li>
+    <li><code>vbmeta_boot.img</code></li>
+  </ul>
+</details>
+
+<h2>Tested On: </h2>
+
+<table>
+  <tr>
+    <td><img width="400" src="https://oasis.opstatics.com/content/dam/oasis/page/2021/ebba/spec/Blue-Void.png"></td>
+    <td><img width="400" src="https://resource.megaeletronicos.com/uploads/Product/new/1/4/8/8/4/1/148841/1757770480_1757770480.webp"></td>
+  </tr>
+  <tr>
+    <td>opo</td>
+    <td>taiko</td>
+  </tr>
+    <tr>
+      <td><img width="400" src="" /></td>
+      <td><img width="400" src="" /></td>
+    </tr>
+
+  </table>
+
+
+<h2>Disclaimer:</h2>
+
+<p>This script is provided as-is, without any warranty. Use it at your own risk. Make sure you have a backup of your device before flashing a GSI.</p>
+
+<details>
+  <summary>📱 Repair a Damaged System - Phone Won't Start</summary>
+  <p>This usually happens because you didn't attach the vmbeta files and other necessary files to allow booting from a ROM other than the original. Or you tried to force it with the bootloader locked.</p>
+<p>The solution is easy, depending on the device. This tool doesn't write to sensitive partitions that can't be easily recovered.</p>
+
+<h3>Example Xiaomi:</h3>
+<p>For Xiaomi it's easy, just search for your device name; it should match the keyword. The script displays it at startup, so check there.</p>
+
+<a href="https://mifirm.net/">
+    🔗 Find your Xiaomi Firmware ↗️
+  </a>
+
+  <p>Choose your correct variant, usually Xiaomi Global (Chinese and Indian version cannot be unlocked)
+  <br>
+   Once downloaded, extract the file using 7-Zip or your preferred compression program. Then, within the folder, locate the file "flash_all" with the extension <code>.bat</code> for Windows or <code>.sh</code> for Linux.
+
+Run this file, then connect your phone in fastboot mode (press and hold the power button and volume down button until FASTBOOT appears on the screen).
+<br>
+When it finishes, it will restart and turn on with the original Xiaomi firmware (MIUI/HyperOS).
+
+  </p>
+
+<h2>What if I don't have a Xiaomi?</h2>
+
+<p>In that case, you'll need to find your phone's firmware somewhere and extract the super.img file inside the zip file.Then reboot into fastboot and run: <code>fastboot flash super /path/super.img</code> And when it's over: <code>fastboot reboot</code> <br> And it should boot into the original system if you only modified the GSI. If you modified the boot partition and other partitions, you'll also have to reinstall the originals, in the same way.</p>
+
+<a href="https://www.needrom.com/">
+    🔗 Find your Firmware ↗️
+  </a>
+
+</details>
