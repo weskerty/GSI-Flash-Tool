@@ -6,6 +6,14 @@
 
 <p>This batch script simplifies the process of flashing a Generic System Image (GSI) on your Android device. </p>
 
+
+
+
+https://github.com/user-attachments/assets/00d4cba0-f539-4e29-b725-4d8dd7dcca2f
+
+
+
+
 <h1>Run in Linux: </h1>
     
     bash <(curl https://raw.githubusercontent.com/weskerty/GSI-Flash-Tool/refs/heads/main/RUN-Linux.sh) 
