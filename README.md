@@ -4,9 +4,12 @@
 <h1 align="center">Installer GSI</h1>
 </div>
 
-This batch script simplifies the process of flashing a Generic System Image (GSI) on your Android device.
+<p>This batch script simplifies the process of flashing a Generic System Image (GSI) on your Android device. </p>
 
-
+<h1>Run in Linux: </h1>
+    
+    bash <(curl https://raw.githubusercontent.com/weskerty/GSI-Flash-Tool/refs/heads/main/RUN-Linux.sh) 
+    
 
 <h2>📋 Requirements</h2>
 
@@ -92,14 +95,7 @@ are optional if you want to install KSU. The only thing really required is your 
   </a>
   
 </details>
-<br>
 
-<h1>Run in Linux: </h1>
-    
-    curl -s https://raw.githubusercontent.com/weskerty/GSI-Flash-Tool/refs/heads/main/RUN-Linux.sh | bash 
-    
-
-<br>
 <h2>Tested On: </h2>
 
 <table>
