@@ -6,7 +6,8 @@ ADBKEY="$HOME/.android/adbkey.pub"
 PARTS="system system_root vendor vendor_dlkm odm odm_dlkm product system_ext"
 PROPVARS="ro.adb.secure=0 persist.sys.usb.config=adb"
 
-DEV=$(adb devices | grep -v "List" | grep -v "^$" | awk '{print $1}' | head -n1)
+DEV=$(adb devices | grep -v "List" | grep -v "^$" | awk '{print $1}' | head -n1 | tr -d '\r')
+#DEV=$(adb devices | grep -v "List" | grep -v "^$" | awk '{print $1}' | head -n1)
 
 if [ -z "$DEV" ]; then
   echo "Error Dispositivo \$NoDetectado"
