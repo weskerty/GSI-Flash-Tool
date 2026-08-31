@@ -1,8 +1,14 @@
 #!/bin/bash
-# Pasos para instalar una rom y activar adb a traves de twrp si tienes la pantalla rota.
+# Pasos para instalar una rom y activar adb a traves de twrp si tienes la pantalla rota. Claramente se requiere bootloader desbloqueado para instalar TWRP.
+# 1 reiniciar a recovery (presionar power y volumen abajo)
+# 2 instalar TWRP o recovery fork como OrangeFox
+# 3 comando: twrp format data
+# 4 descargar https://github.com/leegarchat/dfe-neo-v2/releases/download/2.6.0b1/arm64-v8a-en-DFE-NEO-2.6.0-beta-1-lite.zip y mover desactivar cifrado parche: adb push "DFE.zip" /tmp/DFE.zip 
+# 5 ejecutar este script.
 # Windows requiere git y adb
 # winget install Google.PlatformTools -e --scope machine --source winget
 # winget install Git.Git -e --source winget
+#
 
 
 ADBKEY="$HOME/.android/adbkey.pub"
