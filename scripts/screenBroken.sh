@@ -59,3 +59,5 @@ echo "Listo \$Fin"
 # ---------------------------------------------------------
 # el wipe se queda trabado, no se si se queda trabado o solo twrp no informa a la temrinal que finalizo el proceso, ctrl + c cancela y luego instalas la rom y funciona. 
 # el 159f7d45 es el id del adb device en ese momento debes cambiar por el tuyo.  este script podes corregirlo para windows? osea puedo ejecutarlo en windows con bash terminal de git supongo... ya que ya tengo adb funcional en windows en path... la cosa es que .ssh debe apuntar a un home de windows. podria ser compatible tanto para linux como para windows? no borres sus comentarios.
+# adb -s "$DEV" shell "grep -q 'name=\"adb_enabled\"' /data/system/users/0/settings_global.xml && sed -i 's/name=\"adb_enabled\" value=\"0\"/name=\"adb_enabled\" value=\"1\"/' /data/system/users/0/settings_global.xml"
+# adb -s "$DEV" shell "grep -q 'name=\"development_settings_enabled\"' /data/system/users/0/settings_secure.xml && sed -i 's/name=\"development_settings_enabled\" value=\"0\"/name=\"development_settings_enabled\" value=\"1\"/' /data/system/users/0/settings_secure.xml"
