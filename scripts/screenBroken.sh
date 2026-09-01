@@ -8,7 +8,7 @@
 # Windows requiere git y adb
 # winget install Google.PlatformTools -e --scope machine --source winget
 # winget install Git.Git -e --source winget
-#
+# falta al script twrp mount vendor y system.
 
 
 ADBKEY="$HOME/.android/adbkey.pub"
